@@ -1,22 +1,31 @@
 precio en relacion a cantidad de habitaciones M
-precio promedio por ciudad A
-precio promedio segun que tan al norte este N
-precio en relacion a antiguedad  A 
-precio promedio con escuelas cercanas vs sin escuelas cercanas A
 precio en relacion a superficie total M
-cantidad de banios en relacion a antiguedad N
-precio promedio centros comerciales cercanos vs sin centros comerciales cercanos A
-bubble plot de piscinas A
 bubble plot de centros comerciales cercanos M
-precio promedio por provincia N
 ciudad mas cara y ciudad mas barata M
-cantidad de garages en relacion a la antiguedad N
-antiguedad promedio por provincia A
 usos multiples en relacion a antiguedad M
-superficie en funcion de antiguedad N
-precio por cercania a la costa N
-piscina por cercania a la costa A
 tipo de propiedad segun cercania a la costa M
-distribucion de cantidad de propiedades (geografica) N
 palabra mas frecuente en los titulos M
 heatmap de precio por latitud-longitud M
+
+precio promedio por ciudad A
+precio en relacion a antiguedad  A 
+precio promedio con escuelas cercanas vs sin escuelas cercanas A
+precio promedio centros comerciales cercanos vs sin centros comerciales cercanos A
+bubble plot de piscinas A
+antiguedad promedio por provincia A
+piscina por cercania a la costa A
+
+precio promedio segun que tan al norte este N
+cantidad de banios en relacion a antiguedad N
+precio promedio por provincia N
+cantidad de garages en relacion a la antiguedad N
+superficie en funcion de antiguedad N
+precio por cercania a la costa N
+distribucion de cantidad de propiedades (geografica) N
+
+
+
+
+
+
+
