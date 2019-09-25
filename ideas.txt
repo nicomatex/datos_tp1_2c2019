@@ -18,12 +18,12 @@ piscina por cercania a la costa A
 precio promedio segun que tan al norte este N (hecho)
 cantidad de banios en relacion a antiguedad N (hecho)
 precio promedio por provincia N (hecho)
-cantidad de garages en relacion a la antiguedad N 
+cantidad de garages en relacion a la antiguedad N (hecho)
 superficie en funcion de antiguedad N (hecho)
 precio por cercania a la costa N
 distribucion de cantidad de propiedades (geografica) N (hecho)
 Distribucion de cantidad de publicaciones por tipo de propiedad (hecho)
-
+Propiedades con piscina y Gimnasio (venn) (hecho)
 
 
 
