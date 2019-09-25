@@ -2,9 +2,9 @@
 -- precio en relacion a superficie total M
 -- palabra mas frecuente en los titulos M
 -- heatmap de precio por latitud-longitud M
-ciudad mas cara y ciudad mas barata M
+-- ciudad mas cara y ciudad mas barata M
 
-? bubble plot de centros comerciales cercanos M
+bubble plot de centros comerciales cercanos M
 usos multiples en relacion a antiguedad M
 tipo de propiedad segun cercania a la costa M
 
