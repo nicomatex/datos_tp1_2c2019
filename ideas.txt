@@ -1,11 +1,13 @@
-precio en relacion a cantidad de habitaciones M
-precio en relacion a superficie total M
-bubble plot de centros comerciales cercanos M
+-- precio en relacion a cantidad de habitaciones M
+-- precio en relacion a superficie total M
+-- palabra mas frecuente en los titulos M
+-- heatmap de precio por latitud-longitud M
 ciudad mas cara y ciudad mas barata M
+
+? bubble plot de centros comerciales cercanos M
 usos multiples en relacion a antiguedad M
 tipo de propiedad segun cercania a la costa M
-palabra mas frecuente en los titulos M
-heatmap de precio por latitud-longitud M
+
 
 precio promedio por ciudad A
 precio en relacion a antiguedad  A 
