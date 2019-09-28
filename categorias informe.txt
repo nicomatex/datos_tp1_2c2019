@@ -1,0 +1,29 @@
+interrogantes planteadas y resueltas:
+
+DISTRIBUCION
+- por tipo de propiedad							n
+- por provincia, por ciudad						n
+- proporcion que tienen pileta, gimnasio, garaje y sum			n
+- proporcion que cuentan con escuelas cercanas, centros comerciales.	n
+- proporcion entre metros cubiertos y metros totales. Y por zonas.	n
+- antiguedad.								n
+- cantidad de habitaciones.						n
+
+PRECIO
+- distribucion segun ciudades, provincias, etc. 			x
+- factores que influyen							x
+- distribucion del metro cuadrado segun ciudades			n
+
+LOCALIZACION
+- ver si vale la pena hacerla
+
+ANTIGUEDAD
+- variacion de las caracteristicas con el pasar de los anios		x
+
+ZONAPROP
+- fechas de mas actividad						n
+- evolucion de publicaciones realizadas a lo largo del tiempo		n
+- participacion de las prov						n
+
+SECUND
+- devaluacion de la moneda						n
