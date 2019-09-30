@@ -9,12 +9,13 @@ usos multiples en relacion a antiguedad M
 tipo de propiedad segun cercania a la costa M
 
 
-precio promedio por ciudad A
-precio en relacion a antiguedad  A 
-precio promedio con escuelas cercanas vs sin escuelas cercanas A
-precio promedio centros comerciales cercanos vs sin centros comerciales cercanos A
+-- precio promedio por ciudad A
+-- precio en relacion a antiguedad  A 
+-- precio promedio con escuelas cercanas vs sin escuelas cercanas A
+-- precio promedio centros comerciales cercanos vs sin centros comerciales cercanos A
+-- antiguedad promedio por provincia A
+
 bubble plot de piscinas A
-antiguedad promedio por provincia A
 piscina por cercania a la costa A
 
 precio promedio segun que tan al norte este N (hecho)

@@ -1,0 +1,848 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Arsclassica Article
+% LaTeX Template
+% Version 1.1 (1/8/17)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Lorenzo Pantieri (http://www.lorenzopantieri.net) with extensive modifications by:
+% Vel (vel@latextemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% CON VARIOS TWISTS HECHOS POR EL GRUPO
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+10pt, % Main document font size
+a4paper, % Paper type, use 'letterpaper' for US Letter paper
+oneside, % One page layout (no page indentation)
+%twoside, % Two page layout (page indentation for binding and different headers)
+headinclude,footinclude, % Extra spacing for the header and footer
+BCOR5mm, % Binding correction
+]{scrartcl}
+
+
+\input{structure.tex} % Include the structure.tex file which specified the document structure and layout
+
+\hyphenation{Fortran hy-phen-ation} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
+
+\usepackage{grffile}
+\usepackage{float}
+
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+	\hfill\includegraphics[width=4cm]{logo_fiuba.png}\\
+    \centerline{\includegraphics[width=15cm]{logo_casa.png}}
+    \vfill
+    \spacedallcaps{Trabajo Práctico 1}\\
+    \Large\spacedallcaps{Análisis Exploratorio de Datos}\\
+    \vskip2cm
+    \spacedlowsmallcaps{[75.06 / 95.58] Organización de Datos}\\
+    \spacedlowsmallcaps{Segundo cuatrimestre de 2019}
+    \vfill
+    \Large\begin{table}[hbt]
+    \caption*{\spacedallcaps{Integrantes}} %el asterisco es para sacar la numeración de la tabla
+    \centering
+    \begin{tabular}{llcl} % izq, izq, centro, izq
+    \toprule
+    Apellido & Nombre & Padrón & Mail \\
+    \midrule
+    Aguerre & Nicolás & $102145$ & naguerre@fi.uba.ar \\
+    Parafati & Mauro & $102749$ & mparafati@fi.uba.ar \\
+    Secchi & Ana María & $99131$ & asecchi@fi.uba.ar \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:label}
+    \end{table}
+    \vskip1cm
+    \end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	ENCABEZADOS
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}} % The header for all pages (oneside) or for even pages (twoside)
+%\renewcommand{\subsectionmark}[1]{\markright{\thesubsection~#1}} % Uncomment when using the twoside option - this modifies the header on odd pages
+\lehead{\mbox{\llap{\small\thepage\kern1em\color{halfgray} \vline}\color{halfgray}\hspace{0.5em}\rightmark\hfil}} % The header style
+
+\pagestyle{scrheadings} % Enable the headers specified in this block
+
+%----------------------------------------------------------------------------------------
+%	ÍNDICES
+%----------------------------------------------------------------------------------------
+
+
+\setcounter{tocdepth}{2} % Set the depth of the table of contents to show sections and subsections only
+
+\tableofcontents % Print the table of contents
+
+% Por ahora lo saco, no le veo mucho sentido. - Mauro
+% \listoffigures
+
+
+%----------------------------------------------------------------------------------------
+%	LINKS
+%----------------------------------------------------------------------------------------
+
+\section*{Links prácticos} % This section will not appear in the table of contents due to the star (\section*)
+.
+\begin{itemize}
+
+    \item Repositorio (\href{https://github.com/nicomatex/datos_tp1_2c2019}{GitHub}): github.com/nicomatex/datos\_tp1\_2c2019.
+    \item \href{https://www.kaggle.com/nicolasaguerre/tp1-2c2019}{Kaggle}: www.kaggle.com/nicolasaguerre/tp1-2c2019
+
+
+\end{itemize}
+
+
+
+\newpage % Start the article content on the second page, remove this if you have a longer abstract that goes onto the second page
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCCION
+%----------------------------------------------------------------------------------------
+
+\section{Introducci\'on}
+
+En este informe se busca documentar el an\'alisis exploratorio realizado sobre un dataset que contiene informaci\'on sobre las publicaciones realizadas en \textbf{ZonaProp M\'exico}, una p\'agina web que brinda la posiblidad de disponibilizar una propiedad para su venta.
+\vskip 2mm
+A lo largo del desarrollo de este informe, buscaremos plantear distintas interrogantes que permitan entender mejor la naturaleza de estos datos. Exploraremos las relaciones que existen entre las distintas variables, con el objetivo de encontrar dependencias que no resulten obvias a simple vista.
+\vskip 2mm
+Finalmente desarrollaremos una serie de conclusiones o \textit{insights} que resulten de inter\'es para el lector.
+
+
+\section{An\'alisis introductorio al dataset}
+
+\subsection{Estructura de los datos}
+
+Como primer paso en el an\'alisis exploratorio, y antes de poder empezar a plantearnos cualquier interrogante, resulta necesario entender c\'omo est\'an formados los datos. 
+\vskip 2mm
+El dataset proporcionado consta de un listado de propiedades de M\'exico que fueron publicadas en \textbf{ZonaProp} para su venta. Cada publicaci\'on cuenta con la siguiente informaci\'on:
+
+\begin{itemize}
+
+    \item \textbf{id}: Identificador num\'erico de cada publicaci\'on.
+    \item \textbf{titulo}: T\'itulo con el que se publico la propiedad.
+    \item \textbf{descripcion}: Descripci\'on asignada a la propiedad.
+    \item \textbf{tipodepropiedad}: Indica si se trata de una casa, un departamento, etc.
+    \item \textbf{direccion}: Calle y/o altura de la propiedad.
+    \item \textbf{ciudad}: Ciudad en la que se encuentra ubicada.
+    \item \textbf{provincia}: Provincia en la que se encuentra ubicada.
+    \item \textbf{antiguedad}: Cantidad de años desde que se construy\'o.
+    \item \textbf{habitaciones}: Cantidad de habitaciones en la propiedad.
+    \item \textbf{garages}: Cantidad de garajes que posee.
+    \item \textbf{banos}: Cantidad de baños que posee.
+    \item \textbf{metroscubiertos}: Metros cubiertos de la propiedad.
+    \item \textbf{metrostotales}: Metros totales de la propiedad.
+    \item \textbf{idzona}: Identificador num\'erico para la zona en la que se encuentra.
+    \item \textbf{lat}: Latitud geogr\'afica.
+    \item \textbf{lng}: Longitud geogr\'afica.
+    \item \textbf{fecha}: Fecha en la que fue realizada la publicaci\'on.
+    \item \textbf{gimnasio}: Se indica si posee o no gimnasio.
+    \item \textbf{usosmultiples}: Se indica si posee o no SUM.
+    \item \textbf{piscina}: Se indica si posee o no piscina.
+    \item \textbf{escuelascercanas}: Se indica si la propiedad se encuentra en la cercan\'ia de escuelas.
+    \item \textbf{centroscomercialescercanos}: Se indica si la propiedad se encuentra en la cercan\'ia de centros comerciales.
+    \item \textbf{precio}: Precio con el que se public\'o la propiedad.
+
+\end{itemize}
+
+Como vemos, tenemos suficiente informaci\'on para poder encontrar relaciones interesantes entre las distintas variables que conforman una publicaci\'on.
+
+
+\subsection{Preparaci\'on de los datos}
+
+Realizado el an\'alisis introductorio a los distintos datos que fueron proporcionados, consideramos de vital importancia realizar una \textit{preparaci\'on} de los mismos, a fin de poder facilitar el trabajo posterior. Con \textit{preparaci\'on} nos referimos m\'as espec\'ificamente a:
+
+\begin{itemize}
+    \item \textbf{Manejo de campos faltantes}: Como en todo set de datos, es esperable encontrarnos con publicaciones que no se encuentren completas y que tengan datos ausentes, valores a los que nos referiremos como \textbf{valores nulos} o \textbf{nulls}. Frente a estas situaciones, es necesario tomar un criterio para poder trabajar. El criterio elegido en esta ocasi\'on fue mantener todas las publicaciones que contengan valores nulos para no perder datos de manera innecesaria. Por ejemplo, si buscamos hallar una relaci\'on entre el precio y la cantidad de ambientes, no nos interesar\'ia que el valor de latitud sea nulo para dicha publicaci\'on.
+
+    \item \textbf{Tipos de los datos}: Con el principal objetivo de ahorrar memoria, es importante realizar un proceso de conversi\'on a los distintos tipos de datos que sean provistos para llevarlos a su \textit{tipo ideal}, es decir, a un tipo de dato que sea capaz de mantener la misma informaci\'on utilizando menos recursos. En otros casos, tambi\'en nos interesar\'a convertir los datos a otro tipo para poder facilitar su an\'alisis como puede ser el caso de la \textbf{fecha}.
+    
+\end{itemize}
+
+\section{Interrogantes}
+
+Conocida ya la estructura b\'asica del set de datos y transformado el mismo para lograr aprovechar de manera \'optima los recursos y facilitar su manipulaci\'on, nos proponemos realizar un \textbf{brainstorming} (\textit{lluvia de ideas}) con el objetivo de identificar a las variables que resulten de inter\'es analizar.
+
+\subsection{Distribuci\'on de variables}
+
+Para comenzar, ser\'ia interesante tener a disposici\'on una serie de gr\'aficos que nos introduzcan r\'apidamente en el dataset. Para lograr esto, abarcaremos las siguientes interrogantes:
+\begin{itemize}
+    \item \textit{¿C\'omo se distribuyen las propiedades seg\'un tipo de propiedad?}
+    \item \textit{¿C\'omo se distribuyen seg\'un provincia? ¿Y seg\'un ciudad?}
+    \item \textit{¿Qu\'e proporci\'on de propiedades publicadas tienen pileta? ¿Y qu\'e proporci\'on gimnasio? ¿Y garaje? ¿Y SUM? Etc.}
+    \item \textit{¿Cu\'antas propiedades cuentan con escuelas cercanas? ¿Cu\'antas con centros comerciales?}
+    \item \textit{¿Cu\'al es la proporci\'on entre metros cubiertos y metros totales en general? ¿Y por tipos de propiedad?}
+    \item \textit{¿Qu\'e tan antiguas son las propiedades en general?}
+    \item \textit{¿Qu\'e tantas habitaciones tienen las propiedades?}
+    
+\end{itemize}
+
+\subsection{Precio}
+
+Normalmente, el primer par\'ametro que uno fija a la hora de buscar una propiedad. Es por esto que ser\'a nuestro eje central en el an\'alisis, con los siguientes objetivos en mente:
+\begin{itemize}
+    \item \textit{Encontrar su distribuci\'on fijando distintos par\'ametros como sean las ciudades, provincias, etc.}
+    \item \textit{Encontrar factores que influyan de manera directa o indirecta en el mismo.}
+    \item \textit{¿C\'omo se distribuye el precio del metro cuadrado en las distintas ciudades?}
+\end{itemize}
+
+\subsection{Localizaci\'on}
+
+El atributo m\'as importante de cualquier propiedad es su \textbf{localizaci\'on geogr\'afica}. Con esta direcci\'on buscaremos profundizar en los siguientes aspectos:
+\begin{itemize}
+    \item \textit{Encontrar la distribuci\'on de las publicaciones a lo largo del territorio Mexicano: ¿Qu\'e tanta disponibilidad hay en cada ciudad? ¿Y en cada provincia? ¿D\'onde se encuentran las propiedades m\'as nuevas y donde las m\'as antiguas? Etc.}
+    \item \textit{Encontrar tendencias dependientes de la misma.}
+    \item \textit{¿Qu\'e localizaciones son m\'as propensas a tener piscinas en sus propiedades? ¿Y gimnasios? Etc.}
+    \item \textit{¿C\'omo afectan las cercan\'ias a escuelas, gimnasios, etc. al precio? ¿Var\'ia esto seg\'un la ciudad?}
+\end{itemize}
+
+\subsection{Evoluci\'on de ZonaProp en M\'exico}
+
+Teniendo informaci\'on sobre las fechas de publicaci\'on, resulta interesante plantear las siguientes interrogantes:
+\begin{itemize}
+    \item \textit{¿En qu\'e fechas tuvo ZonaProp m\'as actividad?}
+    \item \textit{¿C\'omo fue la evoluci\'on de publicaciones realizadas a lo largo del tiempo?}
+    \item \textit{¿Cu\'ales son las provincias m\'as activas? ¿Y cu\'ales las ciudades?}
+    
+\end{itemize}
+
+
+\subsection{Aspectos secundarios}
+
+Aprovechando la cantidad de informaci\'on que poseemos de cada publicaci\'on, nos proponemos utilizarla para obtener alguna conclusi\'on en los siguientes apartados:
+\begin{itemize}
+    \item \textit{Aproximaci\'on a la devaluaci\'on de la moneda Mexicana frente al d\'olar (utilizando para esto la evoluci\'on del precio del metro cuadrado).}
+\end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+%	SECCIONES DE ANALISIS
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Distribución de los datos}
+    Un primer aspecto a tener en cuenta del análisis es: ¿C\'omo se distribuyen los datos en sí? 
+    En esta sección se analizará la distribución y proporciones de los datos, con el motivo de tener en cuenta su estructura b\'asica y su composici\'on a la hora de analizar otras variables.
+    
+    \subsection{Geográfica}
+    La interrogante que se desea responder con este análisis es: ¿De que partes de México provienen las publicaciones pertenecientes a este dataset? Para responder a esta interrogante, se presenta el siguiente gráfico, representando la \textbf{densidad de publicaciones según ubicación geográfica}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/distribucion/[distribucion] distribucion de propiedades.png}}
+        \caption{Distribuci\'on de precio por provincia}
+        \label{fig:distribucion-geografica}
+    \end{figure}
+    
+    Se puede observar que el grueso de los datos caen en el centro de M\'exico: \textbf{Distrito Federal}. Tambi\'en podemos ver que algunos puntos caen fuera del territorio, clara muestra de que nuestro dataset est\'a 'sucio', es decir, que posee datos que fueron cargados de manera errónea.
+    
+    \subsection{Seg\'un tipo de propiedad}
+    Tenemos muchos datos, pero, ¿qu\'e proporci\'on de los mismos pertenece a \textbf{casas}? ¿Y qu\'e proporci\'on a apartamentos? Utilizaremos un \textbf{doughnut plot} para ilustrar esto:
+    
+    \begin{figure}[H]
+            \makebox[\textwidth][c]{\includegraphics[width=260px]{plots/distribucion/[distribucion] tipos de propiedad.png}}
+            \caption{Distribuci\'on seg\'un tipo de propiedad}
+            \label{fig:distribucion-tipopropiedad}
+    \end{figure}
+    
+    Vemos entonces que nuestro \textit{dataset} esta formado principalmente por \textbf{Casas} y \textbf{Apartamentos}. Basaremos nuestros futuros an\'alisis en esta importante conclusi\'on.
+    
+    \subsection{Seg\'un atributos extra (piscinas, garajes, gimnasios, etc.)}
+    Nos interesa saber, antes de analizar en profundidad, cu\'al es la proporci\'on de propiedades que cuentan con atributos extra como por ejemplo piscina, garaje, etc. Para ilustrar esto, elegimos un \textbf{stacked bar plot}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=400px]{plots/distribucion/[distribucion] atributos.png}}
+        \caption{Porcentajes de propiedades que cuentan con un determinado atributo}
+        \label{fig:distribucion-atributos}
+    \end{figure}
+    
+    Resulta muy llamativo ver que casi un 90\% de las propiedades \textbf{tienen garaje}, por lo que luego analizaremos si hay alguna relaci\'on entre la antigüedad de la propiedad con los garajes que posee, para ver si encontramos alguna tendencia que explique este fen\'omeno. 
+    \vskip 2mm
+    En cuanto a las cercan\'ias a escuelas, tambi\'en nos llevamos una sorpresa: el 44\% de las propiedades cuentan con una cercana. Si confiamos en la informaci\'on que nos brinda ZonaProp (en realidad no sabemos cu\'al es el requisito que imponen para poder decir que la escuela est\'a cerca), podemos afirmar que \textbf{casi la mitad de las propiedades brindan facilidades a la hora de pensar en el estudio de los niños}.
+    \vskip 2mm
+    A su vez, observamos que 4 de cada 10 propiedades tienen un shopping cercano, lo que probablemente influya de forma directa sobre el precio. Indagaremos en esto m\'as tarde.
+    
+    \subsection{Relaci\'on entre atributos extra}
+    ¿Existe alguna relación entre los atributos extra de una propiedad? Por ejemplo, de las propiedades que tienen piscina, ¿cuales tienen también gimnasio? Se ilustra en el siguiente gráfico dicha relación:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{plots/distribucion/[distribucion] Propiedades con piscina y gimnasio.png}}
+        \caption{Propiedades con piscina y/o con gimnasio}
+        \label{fig:distribucion-piscina-gimnasio}
+    \end{figure}
+    
+    \subsection{Proporci\'on de metros cubiertos por metros totales}
+    Puede resultar interesante en el futuro saber que proporci\'on de los metros totales de una propiedad est\'an cubiertos. Para representar dicha interrogante, realizaremos un \textbf{stacked bar plot}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=350px]{plots/distribucion/[distribucion] proporcion metros.png}}
+        \caption{Proporción de metros cubiertos sobre totales seg\'un tipo de propiedad}
+        \label{fig:distribucion-metros}
+    \end{figure}
+    
+   Como resultado se observa que en general, aproximadamente el \textbf{75\% de los metros de las propiedades son cubiertos}. En particular, podemos ver que para los \textit{apartamentos}, la cifra asciende hasta \textbf{casi un 80\%}: tiene mucha l\'ogica, debido a que los apartamentos en general no poseen metros descubiertos. De hecho, nos llama la atenci\'on que tengan un 20\% de metros descubiertos.
+    
+    \subsection{Seg\'un antigüedad}
+    Ahora intentaremos encontrar la estructura de los datos en cu\'anto a la antigüedad de las propiedades. ¿D\'onde se encuentra el grueso de las publicaciones? Utilizaremos un \textbf{bar plot} para ilustrar los resultados:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=330px]{plots/distribucion/[distribucion] antiguedad.png}}
+        \caption{Distribuci\'on de propiedades seg\'un antigüedad}
+        \label{fig:distribucion-antiguedad}
+    \end{figure}
+    
+    Observado el gr\'afico, podemos extraer las siguientes primeras impresiones:
+    
+    \begin{itemize}
+        \item Una de cada cuatro casas est\'a \textbf{a estrenar}.
+        \item Un 60\% de las casas tienen \textbf{menos de 10 años} de antigüedad.
+        \item S\'olo un 10\% de las casas tienen \textbf{m\'as de 25 años} de antigüedad.
+    \end{itemize}
+    
+    \subsection{Seg\'un cantidad de habitaciones}
+    ¿Qué tendencia marca a las propiedades en cuanto a la cantidad de habitaciones que estas poseen? Intentaremos responder esto utilizando un \textbf{pie plot}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=0.8\textwidth]{plots/distribucion/[distribucion] cantidad habitaciones.png}}
+        \caption{Distribuci\'on de propiedades seg\'un cantidad de habitaciones}
+        \label{fig:distribucion-habitaciones}
+    \end{figure}
+    
+    Vemos que un 56\% de las propiedades tienen \textbf{tres habitaciones}. Probablemente esto se deba a que una familia tipo est\'a compuesta por una pareja con dos hijos, familia que precisar\'ia de tres habitaciones para vivir c\'omodos. Tambi\'en se considera que tres habitaciones es el est\'andar a seguir en los inmuebles modernos.
+    \vskip 2mm
+    Algo que nos llama la atenci\'on de este gr\'afico es que s\'olo un 2\% de las propiedades son \textbf{mono-ambientes}. De todas formas, podemos r\'apidamente darnos cuenta del porqu\'e: como vimos anteriormente, un 60\% de las publicaciones son \textbf{casas}, y prácticamente ninguna casa tiene s\'olamente una habitaci\'on.
+    
+% ------------------------------------------------------
+
+\newpage
+\section{Análisis del precio}
+    La primera pregunta que surge de forma casi inmediata al mirar el set de datos planteado es la siguiente: ¿C\'omo afectan las diferentes variables al precio de las propiedades? Para responder esta pregunta, se analizar\'a si existe \textbf{correlación} entre cada una de las mismas y el precio final de la propiedad.
+    
+    
+    
+\subsection{Distribuci\'on seg\'un ubicaci\'on}
+\subsubsection{Por provincia}
+    Empezamos a continuaci\'on el an\'alisis de la dependencia del precio para con la zona geogr\'afica. ¿C\'omo se distribuyen los precios de las propiedades según la provincia en la que \'esta se encuentre? Para este análisis, se muestra a continuación un \textit{BoxPlot} que muestra los rangos de precio para cada una de las provincias.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] distribucion de precio por provincia.png}}
+        \caption{Distribuci\'on de precio por provincia}
+        \label{fig:precio-distribucion-provincia}
+    \end{figure}
+    
+    Como era de esperarse, el rango de precios mas amplio (y cuyo limite superior es mas elevado) corresponde a Distrito Federal, seguido por Nuevo Leon y  Estado de México.
+    Cabe destacar que en este gráfico, algunos de los \textit{outliers} quedan por fuera de la escala horizontal.
+    
+\subsubsection{Por Ciudad}
+% foto[precio]Lollipop-precio-ciudad
+    Ahora analizamos como varía el precio promedio según \textbf{ciudad}, teniendo en cuenta las ciudades con más de \textbf{2000 publicaciones}. Consideramos que para aproximar mejor el promedio, son de mayor interés, en este caso, las ciudades que con más publicaciones cuentan.  
+    
+        \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio]Lollipop-precio-ciudad.png}}
+        \caption{Precio promedio por ciudad}
+        \label{fig:precio-promedio-ciudad}
+    \end{figure}
+    
+    En lo alto se encuenta la ciudad de \textbf{Huixquilucan}, con un precio promedio de 5.475.000 MXN, lo cual no llama la atención por ser par de Estado de Mexico.  Por otro lado, en lo bajo se encuentra la ciudad de \textbf{Tijuana}, con un precio promedio de 728.000 MXN.
+    Ciudades \textbf{turísticas} como \textbf{Cancún}, \textbf{Acapulco de Juárez} y \textbf{Guadalajara} rondan aproximadamente por el mismo precio promedio, 2.500.000 MXN.
+    
+    
+    
+\subsubsection{Ciudades mas caras y mas baratas}
+    Ahora analizaremos cu\'ales son las diez \textbf{ciudades m\'as caras} y cu\'ales las diez \textbf{m\'as baratas}.
+    \vskip 2mm
+    Como puede ser interesante para el lector, distinguir entre los principales tipos de propiedad, hemos decidido realizar el an\'alisis para casas y para apartamentos por separado (como se observ\'o anteriormente en \textit{Distribuci\'on de los tipos de propiedad}, el 90\% de los datos est\'a formado por \textit{Casas} y \textit{Apartamentos}). Tambi\'en es importante aclarar que se tom\'o como criterio trabajar con las ciudades que tengan al menos 500 publicaciones para evitar posibles \textit{outliers}.
+    \vskip 2mm
+    Primero, analizaremos los resultados para las \textbf{casas}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] ciudades baratas casas.png}}
+        \caption{Diez ciudades m\'as baratas (casas)}
+        \label{fig:precio-ciudades-baratas-casas}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] ciudades caras casas.png}}
+        \caption{Diez ciudades m\'as caras (casas)}
+        \label{fig:precio-ciudades-caras-casas}
+    \end{figure}
+    
+    Podemos ver que la ciudad de \textbf{San Pedro Garza Garc\'ia} (ciudad que forma parte del \'area metropolitana de \textbf{Monterrey}) se posiciona como la ciudad m\'as cara a la hora de buscar casas con un precio rondando los 7.500.000 MXN. Es seguida por \textbf{Huixquilucan}, ciudad que pertenece a \textbf{Distrito Federal} (la provincia m\'as cara de todo M\'exico seg\'un vimos anteriormente), cuyo precio se acerca a los 7.000.000 MXN.
+    \vskip 2mm
+    En el otro extremo, vemos que \textbf{Tijuana}, seguida por \textbf{Cuautitl\'an}, son las ciudades en las que es m\'as barato comprar una casa, con un precio al rededor de los 700.000 MXN. Es interesante observar que Tijuana es la ciudad que se encuentra m\'as al \textbf{sur} de M\'exico, en la frontera con \textbf{Estados Unidos}. Frente a lo que uno cre\'ia, resulta que es m\'as barato comprar una casa all\'i.
+    \vskip 2mm
+    Ahora, representamos los resultados para los \textbf{apartamentos}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] ciudades baratas apart.png}}
+        \caption{Diez ciudades m\'as baratas (apartamentos)}
+        \label{fig:precio-ciudades-baratas-apartamentos}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] ciudades caras apart.png}}
+        \caption{Diez ciudades m\'as caras (apartamentos)}
+        \label{fig:precio-ciudades-caras-apartamentos}
+    \end{figure}
+    
+    En cuanto a los apartamentos, vemos que \textbf{San Pedro Garza Garc\'ia} es nuevamente la ciudad m\'as cara, pero esta vez, por mucha diferencia contra su seguidora, que siguie siendo \textbf{Huixquilucan}. En este caso, comprar un apartamento en San Pedro Garza Garc\'ia costar\'a aproximadamente 6.500.000 MXN, mientras que uno en Huixquilicuan no llega a costar 5.000.000 MXN.
+    \vskip 2mm
+    Por el otro lado, se ve que \textbf{Cautitl\'an Izcalli}, que resulta ser una ciudad vecina a \textbf{Cautitl\'an}, es la m\'as barata para comprar apartamentos, al igual que su seguidora, \textbf{Iztapalapa}. Ambas tienen un precio que ronda los 800.000 MXN.
+
+
+\subsubsection{Seg\'un latitud}
+    Otra pregunta interesante es ¿existe una relación entre el precio de una propiedad y que tan al norte dicha propiedad se encuentre? Quizás por una cuestión de cercanía con Estados Unidos, o por alguna otra razón. Para analizar lo recién mencionado, se muestra a continuación gráficos correspondientes al precio promedio según la latitud, tanto para todas las propiedades, como para casas y apartamentos por separado.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] precio segun latitud(todas las propiedades).png}}
+        \caption{Dependencia del precio con la latitud}
+        \label{fig:precio-latitud-todas}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1\textwidth]{plots/precio/[precio] precio segun latitud(casas).png}}
+        \caption{Dependencia del precio con la latitud (casas)}
+        \label{fig:precio-latitud-casas}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=330px]{plots/precio/[precio] precio segun latitud(apartamentos).png}}
+        \caption{Dependencia del precio con la latitud (apartamentos)}
+        \label{fig:precio-latitud-apartamentos}
+    \end{figure}
+
+    Parece existir una correlación negativa entre la latitud de las propiedades y el precio de las mismas, a pesar de que esta correlación no se ve reflejada si solo se analizan los apartamentos. Esta tendencia se ve marcada cuando se analiza el total de las propiedades dado que la mayoría de estas son casas (como se vio anteriormente en los gráficos de distribución).
+
+
+\subsubsection{Según ubicaci\'on geogr\'afica (latitud y longitud)}
+    Siguiendo en la misma linea del apartado anterior, ahora intentaremos ver de forma gr\'afica cuales son las ubicaciones m\'as caras en M\'exico: Esperamos ver alg\'un pico fuerte en Distrito Federal, ya que como se ha observado anteriormente, resulta ser la provincia m\'as cara de todo M\'exico.
+    \vskip 2mm
+    Para este gr\'afico hemos decidido utilizar un \textbf{HeatMap}:
+
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=400px]{plots/precio/[precio] heatmap lat lng.png}}
+        \caption{Distribuci\'on de precios por latitud y longitud}
+        \label{fig:precio-distribucion-latlng}
+    \end{figure}
+    
+    Como vemos, se ve el pico en la zona de \textbf{Distrito Federal} (Latitud: 19, Longitud: -99) y en los alrededores. Tiene sentido, dado que se trata de la provincia con mayor movimiento de todo M\'exico.
+    
+\newpage    
+\subsection{Distribución según escuelas y centros comerciales cercanos}
+    \subsubsection{Por escuelas cercanas}
+    Habíamos visto que el 44\% de las propiedades cuentan con una escuela cercana. Ahora veamos si existe alguna relación entre el precio y la cercanía a un colegio:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=400px]{plots/precio/[precio]Relacion-precio-escuelas-cercanas.png}}
+        \caption{Precio promedio de propiedades según cercanía a escuelas}
+        \label{fig:precio-escuelas-cercanas-todas-las-prop}
+    \end{figure}
+   
+   El precio promedio no parece variar demasiado, de hecho casi no hay diferencia alguna. Veamos entonces si se resalta alguna diferencia interesante, filtrando el tipo de propiedad por casa, apartamento, casa en condominio y duplex, lugares donde pueden llegar a residir niños:
+   
+       \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=400px]{plots/precio/[precio]Relacion-precio-escuelas}}
+        \caption{Distribución de precio por escuelas cercanas según lugares típicos de residencia}
+        \label{fig:precio-escuelas-cercanas-por-prop}
+    \end{figure}
+  
+  Observando el boxplot, la distribución se da bastante similar en las casas y apartamentos. Sin embargo, el tipo de propiedad 'Duplex' llama bastante la atención: el precio se eleva bastante para aquellos duplex que se encuentran en cercanía con algún colegio. Esto puede deberse a que los duplex cuentan con mayor espacio cubierto que un apartamento, por lo tanto son más propensos a ser habitados por familias numerosas que llevan a los niños al colegio.
+  
+    \subsubsection{Por centros comerciales cercanos}
+        En esta sección analizaremos la relación del precio con la cercanía a algún centro comercial. 
+        
+        \begin{figure}[H]
+         \makebox[\textwidth][c]{\includegraphics[width=400px]{plots/precio/[precio]Relacion precio-centros comerciales cercanos.png}}
+         \caption{Precio promedio de propiedades según cercanía a centros comerciales}
+         \label{fig:precio-escuelas-cercanas-todas-prop}
+    \end{figure}
+     
+    Previamente se había observado 4 de cada 10 propiedades tienen un shopping cercano, y esto podía significar una influencia directa sobre el precio. Para sorpresa, no parece haber diferencia alguna de precio cuando comparamos contra todos los tipos de propiedades. Sin embargo, podemos aproximarnos un poco más: ¿Qué pasará si tomamos en cuenta ciertos tipos de propiedad específicos? 
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=500px]{plots/precio/[precio]Distribucion precio-centros comerciales.png}}
+         \caption{Distribución de precio por cercanía a centro comercial según tipo de propiedad}
+         \label{fig:precio-ccomerciales-cercanas-por-prop}
+    \end{figure}
+    
+    Aquí pueden observarse ciertos resultados interesantes: para viviendas clásicas (ya sea casa, apartamento, quinta) no hay una diferencia manifestada importante. En cambio para propiedades de tipo 'comercial', sí que se puede ver un resalte mayor entre la diferencia de precio. 
+    Si observamos los valores para \textbf{Terreno comercial} tiene mucho sentido que un sea más caro estando en cercanía con un centro comercial que si no lo estuviera y es ahí en donde impacta directamente sobre el precio.
+    
+    \textit{Nótese además que hay propiedades de tipo \textbf{Local en centro comercial} que dan negativo para cercanía; los consideramos absurdos, ya que se esperaría que todos ellos den positivo}
+    
+\newpage 
+\subsection{Distribución según antiguedad}
+    Se podría llegar a pensar que cuánto más nuevo un inmueble, más caro es. Pero, es realmente así? El siguiente \textbf{Heatmap} distribuye el precio promedio de cada tipo de propiedad teniendo en cuenta su antigüedad:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=450px]{plots/precio/[precio]heatmap-precio-antiguedad.png}}
+         \caption{Precio promedio por tipo de propiedad según antigüedad. Fondo gris representa valores nulos}
+         \label{fig:precio-propiedad-antiguedad}
+    \end{figure}
+    
+    Se puede observar la falta de valores para ciertas celdas; sin embargo hay una cantidad significativa de datos para analizar por casas y apartamentos. A continuación se analizarán dichos casos.
+    
+    \subsubsection{Por Casas}.
+        \begin{figure}[H]
+            \makebox[\textwidth][c]{\includegraphics[width=310px]{plots/precio/[precio]regplot_precio_antiguedad_casa.png}}
+            \caption{Precio promedio de casas en relación con la antigüedad}
+             \label{fig:precio-casa-antiguedad-reg}
+        \end{figure}
+        
+        Como se observa en este gráfico y en el anterior Heatmap, el precio promedio de las casas tiende a ascender al pasar de los años. 
+        Podemos interpretar que las casas solían construirse en terrenos más grandes y con otros tipos de materiales, generalmente más costosos. Además, terrenos más grandes significan casas más grandes, en comparación con las casas modernas, que suelen ser más pequeñas y con una cantidad más escasa de ambientes. Si bien esto no llega a justificar con precisión estos resultados, sería algo a tener en cuenta.
+        
+        Observemos el siguiente \textbf{Scatterplot} :
+        
+        \begin{figure}[H]
+            \makebox[\textwidth][c]{\includegraphics[width=420px]{plots/precio/[precio]splot_precio_antiguedad_casa.png}}
+            \caption{Distribución de precio de las casas según antiguedad}
+             \label{fig:precio-casa-antiguedad-scatt}
+        \end{figure}
+        
+        Aquí se resalta el precio directo de cada casa, según su antigüedad. A medida que aumenta la antigüedad, van bajando la cantidad de casas menos costosas.
+        
+    \subsubsection{Por Apartamento}.
+        \begin{figure}[H]
+            \makebox[\textwidth][c]{\includegraphics[width=320px]{plots/precio/[precio]regplot_precio_antiguedad_depa.png}}
+            \caption{Precio promedio de apartamentos en relación con la antigüedad}
+             \label{fig:precio-depa-antiguedad-reg}
+        \end{figure}
+        
+    Analizando el \textbf{Regplot}, se observa que a \textbf{mayor modernidad, más costoso} será el apartamento. Esto llega a tener sentido, ya que los apartamentos modernos tienden a ser más costosos por la disponibilidad que ofrecen de distintos amenities. Chequearemos esto más adelante.
+    
+        \begin{figure}[H]
+            \makebox[\textwidth][c]{\includegraphics[width=420px]{plots/precio/[precio]splot_precio_antiguedad_depa.png}}
+            \caption{Distribución de precio de los apartamentos según antiguedad}
+             \label{fig:precio-depa-antiguedad-scatt}
+        \end{figure}
+    
+    Aquí observamos claramente la tendencia de que a mayor antigüedad del apartamento, más valor pierde la propiedad; aquel salto se puede percibir especialmente entre los valores 0 a 10 años y valores de 10 a 20 años. 
+
+\newpage    
+\subsection{Distribuci\'on seg\'un otros par\'ametros}
+    \subsubsection{Por cantidad de habitaciones}
+    Claramente, esperamos que aquellas propiedades que tengan mayor cantidad de \textbf{habitaciones} sean m\'as caras: esperamos ver una relaci\'on claramente lineal. De todas formas, es v\'alido verificarlo.
+    \vskip 2mm
+    Como se trata de una variable discreta, y tambi\'en nos interesa mostrar los valores separando Casas de Apartamentos, para este apartado hemos decidido utilizar un gr\'afico de barras (\textbf{BarPlot}):
+
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] habitaciones.png}}
+        \caption{Distribuci\'on de precios por cantidad de habitaciones}
+        \label{fig:precio-distribucion-habitaciones}
+    \end{figure}
+    
+    Se puede ver, como se esperaba, una relaci\'on lineal. De todas formas, observamos algunos factores que pueden ser interesantes:
+    
+    \begin{itemize}
+        \item El precio promedio es pr\'acticamente el mismo cuando se tiene una o dos habitaciones.
+        \item Hay un gran salto entre tener dos habitaciones a tener tres. Esto puede deberse a que los apartamentos de tres habitaciones suelen ser los m\'as demandados por las familias tipo.
+        \item El pico se alcanza para propiedades con cuatro habitaciones. Luego, se ve que el precio promedio se estabiliza.
+        \item Si analizamos los \textit{Apartamentos} por separado, vemos que su evoluci\'on parece ser exponencial entre aquellas propiedades que tienen dos habitaciones y las que tienen cuatro: vemos que un apartamento con dos habitaciones tiene un precio que ronda los 2.000.000 MXN, mientras que uno que tiene 4 habitaciones tiene un precio que ronda los 5.500.000 MXN, es decir que pr\'acticamente se tripl\'ica el valor. Esto seguramente se deba a que los apartamentos de m\'as de 3 habitaciones son escasos y m\'as modernos.
+    \end{itemize}
+    
+    Como este gr\'afico es muy general, nos resulta de inter\'es ver como evoluciona el precio seg\'un la cantidad de habitaciones en zonas de alta demanda y precio, como por ejemplo, \textbf{Distrito Federal}. Uno esperar\'ia que al ser una zona muy densa y cara, el salto entre las propiedades que ofrecen pocas habitaciones a aquellas que ofrezcan m\'as, sea mucho m\'as marcado.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] habitaciones df.png}}
+        \caption{Distribuci\'on de precios por cantidad de habitaciones (Distrito Federal)}
+        \label{fig:precio-distribucion-habitacionesdf}
+    \end{figure}
+    
+    Contrario a lo esperado, cuando se analiza \textbf{Distrito Federal} en particular, los resultados parecen tender a estabilizarse entre los distintos tipos de propiedad. Tambi\'en se ve que, nuevamente, el precio de los \textit{monoambientes} es pr\'acticamente el mismo que el de las propiedades que cuentan con dos habitaciones.
+    
+    
+    \subsubsection{Por cantidad de metros cuadrados}
+    En cuanto a la \textbf{distribuci\'on del precio por metros cuadrados totales}, es normal esperar que la relaci\'on sea \textbf{totalmente lineal}: mientras m\'as metros cuadrados se tienen, m\'as cara es una propiedad. De todas formas vamos a verificar que esto se cumpla y analizar la magnitud de la pendiente de la recta que mejor ajuste.
+    \vskip 2mm
+    Para representar esta relaci\'on, se eligi\'o utilizar dos ajustes lineales en base a puntos (\textbf{RegPlot}): uno para los metros totales, y otro para los metros cubiertos. Analizaremos luego los resultados de ambos gr\'aficos obtenidos.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] metros cubiertos.png}}
+        \caption{Dependencia del precio con los metros cuadrados cubiertos}
+        \label{fig:precio-distribucion-metroscubiertos}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/precio/[precio] metros totales.png}}
+        \caption{Dependencia del precio con los metros cuadrados totales}
+        \label{fig:precio-distribucion-metrostotales}
+    \end{figure}
+    
+    Claramente vemos que se cumple  la relaci\'on lineal que esperábamos. Sin embargo, resulta de inter\'es analizar la pendiente de la recta que mejor ajusta en ambos casos:
+    
+    \begin{itemize}
+        \item En el caso de los \textbf{metros totales}, vemos una recta que crece con una pendiente aproximada de 10.000 MXN/m (podemos verificar este resultado luego analizando el \textit{precio promedio} del metro cuadrado).
+        \item En el caso de los \textbf{metros cubiertos}, se ve una pendiente aproximada de 15.000 MXN/m, es decir, un 150\% de la pendiente que encontramos para los metros totales.
+    \end{itemize}
+    
+    Se puede concluir entonces, lo que desde un principio era esperado: la relaci\'on es lineal, y a medida que aumentan los metros cubiertos, el precio aumenta m\'as r\'apidamente en comparaci\'on con el aumento producido por la suba de los metros totales.
+    
+\newpage    
+\subsection{Precio promedio del metro cuadrado}
+    Habiendo realizado ya un profundo an\'alisis de los factores que influyen de manera directa sobre el precio, tales como la ubicaci\'on geogr\'afica, la cantidad de metros, la cantidad de habitaciones, etc., se propone ahora realizar un an\'alisis \textbf{intensivo} espec\'ifico sobre el \textbf{precio promedio del metro cuadrado}.
+    \vskip 2mm
+    El objetivo es ver de forma clara como var\'ia el mismo, calculado de manera general y promediada, seg\'un la provincia. A partir de los gr\'aficos buscaremos hallar conclusiones interesantes
+    \vskip 2mm
+    Se eligi\'o para representar esta interrogante, un \textbf{lollipop plot}, una especie de gr\'afico h\'ibrido entre un \textbf{scatter plot} y un \textbf{bar plot}:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/precio/[precio] precio mt cuadrado por provincia.png}}
+        \caption{Precio promedio del metro cuadrado por provincia}
+        \label{fig:precio-metrocuadrado-provincia}
+    \end{figure}
+    
+    Se ve claramente que \textbf{Distrito Federal} es, por mucho, la provincia m\'as cara en todo M\'exico: vemos que el precio promedio de un metro cuadrado cuesta aproxim\'adamente 23.000 MXN.
+    
+    
+    \subsubsection{Diferencias respecto del precio promedio del metro cuadrado}
+    Resulta entonces muy interesante plantear la siguiente interrogante: ¿Qu\'e tanto m\'as cara es cada provincia respecto del \textbf{precio promedio del metro cuadrado} teniendo en cuenta todo M\'exico?
+    \vskip 2mm
+    Utilizaremos un \textbf{bar plot} para mostrar los resultados:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/precio/[precio] diferencia precio mt cuadrado promedio.png}}
+        \caption{Diferencias respecto del precio promedio del metro cuadrado para cada provincia}
+        \label{fig:precio-metrocuadrado-diferencia-provincia}
+    \end{figure}
+    
+    Podemos observar que la diferencia entre \textbf{Distrito Federal} y el resto de las provincias es abismal. De hecho, \textbf{Ditrito Federal} y, en una medida considerablemente menor, \textbf{Guerrero}, son las \'unicas provincias que tienen un precio m\'as alto al promedio en cuanto a metros cuadrados. Todas las dem\'as, caen por debajo. Resulta impactante ver estos resultados gr\'aficamente: hay una diferencia de 18.000 MXN por metro cuadrado entre la provincia m\'as barata y la m\'as cara.
+
+    \newpage
+    \subsection{Precio promedio según amenities}
+    Es un hecho que las amenities como gimnasio, piscina o salón de usos múltiples agregan al valor de la propiedad. En el siguiente gráfico se ilustran los precios promedios para las propiedades que contienen dichas amenities, y, de todas las propiedades que contienen alguna de estas cosas, que porcentaje de ellas tiene cada amenity. 
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=0.9\textwidth]{plots/precio/[precio] Precio segun amenities.png}}
+        \caption{Precio promedio según amenities}
+        \label{fig:precio-promedio-amenities}
+    \end{figure}
+    
+    Podemos apreciar que de todas las amenities, la piscina es la mas barata, y que existe una marcada tendencia a incrementar el precio mientras mayor cantidad de amenities se tengan: Las propiedades que tienen tanto Salón de Usos Múltiples como gimnasio y piscina son aquellas que presentan el mayor precio promedio respecto de las demás categorías hechas en este gráfico.
+% ------------------------------------------------------
+ 
+\newpage
+\section{Análisis según antigüedad}
+    Otro aspecto que puede resultar interesante es verificar como las características de las propiedades han ido variando con el pasar de los años. En el análisis que sigue se analiza la evolución de varios parámetros de interés como función de la antigüedad.
+    Comencemos por observar la distribución de la antigüedad por cada provincia:
+    
+        \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=500px]{plots/antiguedad/[antiguedad]boxplotAntiguedadProvincia.png}}
+        \caption{Distribución de la antigüedad promedio por Provincia}
+        \label{fig:antiguedad-provincia}
+    \end{figure}
+    
+    Como es de esperar, las reconocidas ciudades antiguas como el Distrito Federal y Estado de Mexico son las que presentan un mayor promedio.
+    
+    \subsection{Superficie según la antigüedad}
+    Un primer aspecto posiblemente interesante es analizar como varió el tamaño de las propiedades con el correr de los años. Se incluyen a continuación gráficos correspondientes a la correlación entre la superficie cubierta, la superficie total y la antigüedad, siendo el análisis realizado con la totalidad de las publicaciones cuya antigüedad y superficie son valores válidos.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/antiguedad/[antiguedad] superficie cubierta media en funcion de antiguedad.png}}
+        \caption{Superficie cubierta media según la antigüedad}
+        \label{fig:superficie-cubierta-antiguedad}
+    \end{figure}
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/antiguedad/[antiguedad] superficie total media en funcion de antiguedad.png}}
+        \caption{Superficie total media según la antigüedad}
+        \label{fig:superficie-total-antiguedad}
+    \end{figure}
+
+    Como era de esperarse, la superficie tiene una tendencia creciente con la antigüedad, esto es, las propiedades mas antiguas tienen una superficie mayor que las propiedades mas nuevas, aunque los datos de propiedades mas antiguas presentan una mayor dispersión en cuanto a la superficie.
+    
+    
+    %\newpage
+    \subsection{Cantidad de baños según la antigüedad}
+    Quizás sea notorio que las casas mas antiguas tienen una cantidad inusual de baños. El propósito del siguiente análisis es verificar si este set de datos manifiesta dicha correlación. Para este análisis, se discretizó la variable antigüedad en intervalos. 
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/antiguedad/[antiguedad] Banios segun antiguedad.png}}
+        \caption{Cantidad de baños según la antigüedad}
+        \label{fig:banios-antiguedad}
+    \end{figure}
+    
+    Si bien no existe una tendencia marcada a aumentar la cantidad de baños con la antigüedad, podemos observar que el desv\'io est\'andar de los datos seg\'un la antiguedad aumenta, se vuelve cada vez m\'as grande. Esto puede deberse a la diversidad esperada.
+    
+    %\newpage
+    \subsection{Cantidad de garajes según la antigüedad}
+    De forma análoga al análisis anterior, se busca una correlación entre la cantidad de garajes y la antigüedad de la propiedad. En este análisis, no se discretizó la variable antigüedad en intervalos, con el objetivo de ver si los resultados hallados se manifestaban de forma diferente.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/antiguedad/[antiguedad] Garages segun antiguedad.png}}
+        \caption{Cantidad de garajes según la antigüedad}
+        \label{fig:garajes-antiguedad}
+    \end{figure}
+    
+    Al igual que en el caso de los baños, los datos para las propiedades mas antiguas están mas dispersos, pero no hay una tendencia marcada respecto de la antigüedad.
+    
+% ------------------------------------------------------
+ 
+\newpage
+\section{Evoluci\'on de ZonaProp}
+    \subsection{Evoluci\'on temporal}
+    Se aprecia en el siguiente gráfico la evolución de cantidad de publicaciones en ZonaProp, discriminadas por tipo. 
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/evolucion/[evolucion] Cantidad de publicaciones por anio.png}}
+        \caption{Publicaciones de cada tipo según el año}
+        \label{fig:publicaciones-anuales}
+    \end{figure}
+    Como es de esperarse, la mayor cantidad de publicaciones para todos los años corresponde a Casas, y la cantidad de publicaciones total ha sido creciente. 
+    \subsubsection{Fechas de mayor actividad}
+    Realizando un análisis mas fino, pretendemos ver en que épocas del año se concentra la mayor cantidad de publicaciones. Con estos fines, se ilustra a continuación un heatmap de cantidad de publicaciones según el año y el mes.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/evolucion/[evolucion] heatmap publicaciones por anio.png}}
+        \caption{Cantidad de publicaciones según año y mes}
+        \label{fig:publicaciones-mes-anio}
+    \end{figure}
+    
+    Por alguna razón (quizás debido a factores mas propios del dataset que de la distribución real de publicaciones), parece ser que la mayor cantidad de publicaciones se concentran en Diciembre de 2016. A fin de analizar la distribución del resto de los años, se ilustra a continuación un heatmap considerando todos los años hasta 2015.
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.1\textwidth]{plots/evolucion/[evolucion] heatmap publicaciones por anio sin 2016.png}}
+        \caption{Cantidad de publicaciones según año y mes, sin contar el 2016}
+        \label{fig:publicaciones-mes-anio-sin-2016}
+    \end{figure}
+    
+    Se puede apreciar en este heatmap que existe una tendencia a aumentar en la cantidad de publicaciones hacia el último tercio de cada año, y también el ya mencionado incremento de cantidad de publicaciones en los años mas recientes.
+
+% ------------------------------------------------------
+ 
+\newpage
+    \section{Aspectos secundarios de inter\'es}
+    \subsection{Devaluaci\'on de la moneda}
+    Ser\'ia interesante poder utilizar los datos que tenemos sobre las propiedades puestas a la venta entre 2012 y 2016 para extraer alguna especie de informaci\'on sobre la \textbf{econom\'ia mexicana}.
+    \vskip 2mm
+    Para esto, proponemos analizar la evoluci\'on del precio del metro cuadrado promedio a lo largo de estos años: si la curva resultado fuese constante, esto indicar\'ia que los precios se mantuvieron a lo largo del tiempo y que la moneda mexicana no se devalu\'o frente al \textit{d\'olar estadounidense}*.
+    Por el contrario, si la curva resulta creciente, esto nos dar\'a una idea de los \'indices de inflaci\'on mexicana y de la devaluaci\'on de la moneda.
+    \vskip 2mm
+    Para este gr\'afico, discretizamos las variables seg\'un Mes y Año, y luego utilizamos un simple \textbf{line plot} para mostrar la evoluci\'on:
+    
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/otros/[otros] evolucion precio metro cuadrado.png}}
+        \caption{Evoluci\'on del precio promedio del metro cuadrado a lo largo del tiempo}
+        \label{fig:inflacion}
+    \end{figure}
+    
+    Vemos que, m\'as all\'a de los picos de subidas y bajadas, se ve una clara tendencia: \textbf{el precio promedio del metro cuadrado duplic\'o su valor en cuatro años}. Es importante aclarar, nuevamente, que todos estos resultados est\'an atados a los datos que nos proporciona \textbf{ZonaProp}, y que debido a negligencia en la carga de datos puede que los mismos no sean fieles a la realidad. Sin embargo consideramos a los mismos como una buena aproximaci\'on.
+
+\let\thefootnote\relax\footnotetext{* \textit{Analizamos los resultados en funci\'on del d\'olar estadounidense ya que la misma se suele tomar como moneda de referencia debido a la \'infima inflaci\'on que presenta Estados Unidos. Adem\'as, en el caso particular de M\'exico, toma mayor importancia debido a la cercan\'ia geogr\'afica que presentan.}}
+
+\newpage
+\subsection{Nivel de Ingresos según Entidad Federativa (Provincia)}
+
+Consideramos importante tener alguna visión aproximada del \textbf{nivel de poder adquisitivo} de las personas que residen en México. 
+Es por esto que para esta sección, decidimos trabajar paralelamente con un dataset* proporcionado por el \textbf{Gobierno de México} a través de su amplia \href{https://datos.gob.mx}{página web}.
+\vskip 2mm
+El dataset cuenta con \textbf{133.855 filas y 6 columnas}. Contiene datos desde el año 2005 al 2019, sin embargo solo fueron tomados los datos desde el año 2012 al 2016 (Que corresponden al período de publicaciones del dataset proporcionado por Navent). El dataset fue debidamente depurado y filtrado para descartar datos no deseados. 
+\vskip 2mm
+Cada fila cuenta entonces con la siguiente información:
+
+\begin{itemize}
+
+    \item \textbf{Entidad\_Federativa}: Provincia
+    \item \textbf{Nivel\_Ingresos}: El nivel de ingresos medido en salarios. Pueden ser:
+        \begin{itemize}
+            \item \textit{No especificado}
+            \item \textit{No recibe ingresos}
+            \item \textit{Menos de 1 salario minimo}
+            \item \textit{1 salario minimo}
+            \item \textit{Mas de 1 hasta 2 salarios minimos}
+            \item \textit{Mas de 2 hasta 3 salarios minimos}
+            \item \textit{Mas de 3 hasta 5 salarios minimos}
+            \item \textit{Mas de 5 hasta 10 salarios minimos}
+            \item \textit{Mas de 10 salarios minimo}
+        \end{itemize}
+    \item \textbf{Numero\_personas}: Cantidad de personas que cobran poseen dicho nivel de ingreso.       
+\end{itemize}
+
+Teniendo en cuenta la \textbf{distribución de precios por provincia} de la figura \ref{fig:precio-distribucion-provincia}, queremos ver si existe algún tipo de relación de precios de las propiedades entre el precio promedio de la provincia y el nivel de ingresos de la población en dicho lugar geográfico.
+
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/otros/[otros]NivelIngresosEntidadCara.png}}
+        \caption{Nivel de ingresos de la población con respecto a entidades federativas (provincias) costosas para vivir (2012 - 1016)}
+        \label{fig:nivel-ingresos-cara}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{plots/otros/[otros]NivelIngresosEntidadBarata.png}}
+        \caption{Nivel de ingresos de la población con respecto a entidades federativas (provincias) más económicas para vivir (2012 - 1016)}
+        \label{fig:nivel-ingresos-barata}
+    \end{figure}
+    
+    \begin{itemize}
+            \item En las entidades federativas más costosas se obtiene un valor esperable: Son muchos más los individuos que cobran por encima de 2 hasta 5 salarios mínimos que menos de 1 salario mínimo.
+            \item Baja California Norte es una de las provincias más económicas de México, sin embargo hay una diferencia abismal entre personas que ganan mas de 3 hasta 5 salarios mínimos y personas que cobran 1 salario mínimo ó menos.
+            \item En el Estado de Mexico, a pesar de ser uno de los más desarrollados, hay una importante cantidad de personas que cobran menos de un salario minimo.
+            \item El nivel de ingresos por entidad federativa más económica, la cantidad de personas que ganan menos de 1 salario mínimo es prácticamente constante, con un pico elevado en Hidalgo y un pico más bajo en Baja California Sur.
+            \item En comparación con ambos gráficos, hay mucha una cantidad significativa de personas que cobran más de 5 salarios mínimos en las provincias más caras que en las provincias más baratas.
+            \item Hay más cantidad de personas en la figura \ref{fig:nivel-ingresos-cara} que en la figura \ref{fig:nivel-ingresos-barata}, lo cual se puede interpretar que en las provincias más caras, hay un mayor índice de población.
+            \item El salto de ganar un salario mínimo y más de uno, es mucho más violento en las provincias más caras, mientras que, en las provincias más baratas es más suave, a excepción quizás de Baja California.
+            \item En las provincias más caras, el pico se alcanza para un nivel de ingresos de más de 1 hasta 3 salarios mínimos, ya que ambas barras van prácticamente iguales. Luego, se ve que el nivel promedio se estabiliza.
+            Por otro lado, en las provincias más económicas, se observa un pico pronunciado de más de uno hasta dos salarios mínimos, con la excepción de Baja California, que tiene su pico en más de dos hasta tres salarios mínimos. 
+            \item La cantidad de personas que ganan un salario mínimo permanece básicamente constante, sin picos importantes.
+            \end{itemize}
+
+
+%----------------------------------------------------------------------------------------
+%	CONCLUSIONES (INSIGHTS)
+%----------------------------------------------------------------------------------------
+
+\newpage
+\section{Conclusiones}
+    Para comenzar es importante destacar que, si bien consideramos que el análisis realizado fue bastante profundo, se podrían haber hallado resultados m\'as interesantes si se hubiera tenido información respecto de si las \textbf{publicaciones resultaron o no en una venta}, y de ser así, \textbf{cuanto tiempo transcurrió entre la realización de la publicación y la venta efectiva}. A partir de estos datos hubiera sido posible plantearse nuevas interrogantes que resulten de inter\'es, como por ejemplo: \textif{¿Qu\'e tipo de propiedad se vendi\'o m\'as cada año? ¿Cu\'al es la influencia de los atributos tales como gimnasio, pileta, etc. sobre las compras (es decir, que tanto la gente busca dichos atributos en las propiedades que efectivamente compran)? ¿Cu\'ales son las descripciones de propiedad que atran m\'as potenciales compradores?} Y as\'i podr\'iamos seguir, y sin duda obtendr\'iamos algunas conclusiones mucho m\'as interesantes.
+    \vskip 2mm
+    Tambi\'en es importante aclarar nuevamente, como ya se hizo anteriormente en el desarrollo del informe, que estas conclusiones se basan en el an\'alisis de 300.000 publicaciones de ZonaProp que contaban con muchos outliers, y muchos datos poco coherentes (probablemente como consecuencia de la carga negligente de los mismos, o de la falta de validaci\'on por ZonaProp a la hora de aceptar una publicaci\'on). Se detectaron, por ejemplo:
+    
+    \begin{itemize}
+        \item S\'olo el 30\% de los mismos presentaban informaci\'on coherente sobre los \textbf{metros cubiertos} y sobre los \textbf{metros totales}. 
+        \item S\'olo el 50\% posee informaci\'on sobre su \textbf{latitud y longitud}. Descubrimos tambi\'en que, de los datos que poseen valores de \textbf{latitud y longitud}, muchos de estos no son coherentes con la informaci\'on que proporcionan en sus campos de \textbf{Ciudad} y/o \textbf{Provincia}, as\'i como otros de estos geogr\'aficamente se encuentran en el océano.
+        \item Si bien desde el principio suponemos que nos fueron proporcionados los datos de ZonaProp entre 2012 y 2016 (existen 60 meses entre los cuales se distribuyen las publicaciones, por lo que de ser uniforme la distribuci\'on, deber\'iamos tener aproxim\'adamente 5000 datos en cada mes), se descubri\'o que el 10\% de los datos, es decir, 30.000 publicaciones, pertenecen al mes de \textbf{Diciembre del 2016}, es decir, el \'ultimo mes del cu\'al se tiene informaci\'on. Esto nos da para pensar si realmente todas esas publicaciones pertenecen efectivamente a dicho mes o si por el contrario tenemos datos para los cu\'ales no sabemos su fecha de publicaci\'on. 
+        \item El dataset nos proporciona informaci\'on sobre si la propiedad se encuentra o no en cercan\'ia a escuelas o centros comerciales, pero no tenemos idea seg\'un qu\'e criterio. Hubiese resultado interesante conocer \textbf{el radio} para el cu\'al ZonaProp considera que una propiedad es cercana a un determinado punto, para entonces poder analizar por ejemplo, por medio de intersecciones, la ubicaci\'on geogr\'afica de algunas de las escuelas y/o centros comerciales.
+        
+    \end{itemize}
+    
+\subsection{Insights}
+
+    A continuaci\'on se presenta un listado de los insights que pueden llegar a resultar interesantes que fueron descubiertos a lo largo del an\'alisis:
+    
+    \begin{itemize}
+        \item La \textbf{popularidad} de la plataforma \textbf{ZonaProp} ha ido creciendo casi de manera uniforme a lo largo de de los últimos años, y se observa que en el 2016 se publicaron \textbf{el doble de Casas y Apartamentos} que en 2015 (Atenci\'on: es posible que estos datos no sean fieles a la realidad por la situaci\'on expresada en el apartado anterior).
+        
+        \item Se descubri\'o una tendencia bien marcada a publicar las propiedades \textbf{en el \'ultimo cuatrimestre del año}. 
+        
+        \item Analizando la evoluci\'on del precio promedio del metro cuadrado seg\'un la fecha, observamos que el mismo ha ido subiendo a un ritmo muy elevado, al punto de llegar a \textbf{duplicar su valor en tan solo cinco años}. Suponemos que este aumento est\'a fuertemente relacionado con la devaluaci\'on de la moneda mexicana.
+        
+        \item Resulta muy interesante observar la siguiente tendencia inmobiliaria: \textbf{la mitad} de las publicaciones poseen \textbf{tres habitaciones}. De hecho, si observamos en el precio en funci\'on de la cantidad de habitaciones, vemos que hay un salto muy grande entre las propiedades que poseen dos habitaciones y las que poseen tres, as\'i como el salto que existe, en el caso de los \textit{apartamentos}, entre los que poseen tres y los que poseen cuatro.
+        
+        \item \textbf{Casi un 90\%} de las propiedades incluyen uno o m\'as \textbf{garajes}. Esto nos result\'o muy inesperado, aunque analizando esta observaci\'on con detenimiento, debemos recordar que la mayor\'ia de los datos son propiedades de tipo \textbf{Casa} (m\'as propensas a tener garajes) y de la provincia \textbf{Distrito Federal}, zona que presenta mayor densidad poblacional. De todas formas, resulta interesante observar este dato.
+        
+        \item Respecto de la \textbf{ubicaci\'on geogr\'afica}, se observa una importante tendencia: \textbf{el precio disminuye mientras m\'as al norte nos encontremos}. De hecho, se observa que la mitad inferior de M\'exico posee un precio promedio mucho m\'as elevado a las zonas de mayor cercan\'ia a los Estados Unidos, relaci\'on que en principio cre\'imos que podr\'ia ser al rev\'es.
+        
+        \item Un 25\% de las propiedades puestas en venta se encuentran \textbf{a estrenar}, y m\'as de la mitad (un 60\%) tienen \textbf{menos de 10 años de antigüedad}. Esto nos puede marcar dos posibles causas): el mercado inmobiliario en M\'exico es \textbf{muy moderno}, y/o aquellas personas poseedoras de propiedades antiguas no tienen intereses en venderlas.
+        
+        \item Es probable que la distribución del dataset no refleje la distribución real de las propiedades en venta en México (por ejemplo, que la mayoría de las propiedades en venta son casas y no apartamentos). Esto puede ser indicador de que \textbf{los sitios web para compra-venta de propiedades suelen ser utilizados más tanto por compradores como por poseedores de casas y apartamentos}, en contraste con otros tipos de propiedades, como por ejemplo locales comerciales, oficinas, etc., y por ende la información que se le hace disponible a quienes navegan por dicho sitio resulta ser de interés para un grande pero acotado segmento de la población. Nuestra \textbf{propuesta} aqu\'i es lanzar un \textbf{programa especial para promocionar la venta de propiedades especiales}, como por ejemplo, la de oficinas, locales comerciales, terrenos, etc. Si se agranda el enfoque, se conseguir\'ia \textbf{mayor cantidad de transacciones} y por lo tanto \textbf{mayor cantidad de ganancia}.
+        
+        \item Se observa en el an\'alisis que la mayor cantidad de los datos provienen de \textbf{Distrito Federal}, lo cual es razonable, considerando que es allí donde es mayor la densidad poblacional de México. En vista de esto, nuestra propuesta para ZonaProp es la siguiente: debería \textbf{incrementarse la publicidad del sitio en localidades que presenten una cantidad de publicaciones comparativamente baja} en relación a su cantidad de habitantes (como podría serlo Ciudad Juárez), con programas especiales, promociones, y beneficios para quienes se incorporen a la plataforma. Por ejemplo, dado que hemos visto que el coste promedio de las propiedades es muy distinto en Distrito Federal respecto del resto de las provincias, una opci\'on podr\'ia ser personalizar las comisiones que se cobran dependiendo de la ubicaci\'on de la propiedad, para animar a los sectores m\'as aislados a incorporarse por un costo relativamente bajo.
+        
+        
+    \end{itemize}
+
+\let\thefootnote\relax\footnotetext{* \textit{Fuente del dataset: https://datos.gob.mx/busca/dataset/indicadores-estrategicos-poblacion-ocupada-por-nivel-de-ingresos}}
+    
+
+\end{document}
